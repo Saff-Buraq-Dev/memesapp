@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+<q-page style="background: linear-gradient(#cbd4f3, #719aff);">
+    <div class="row align-items justify-center">
+        <q-card square class="q-mt-lg shadow-24 col-12 col-md-7">
+            <img src="/assets/memesapp-resized.png" class="q-mt-lg"
+                style="width: fit-content; height: fit-content; margin: auto;">
+            <q-form class="q-gutter-md" action="/login" method="POST">
+                <q-card-section>
+                    <q-input name="username" autofucus square clearable v-model="login.name" type="text" lazy-rules
+                        :rules="[this.required]" label="username ou email">
+                        <template v-slot:prepend>
+                            <q-icon name="account_circle" />
+                        </template>
+
+                    </q-input>
+                    <q-input name="password" square clearable v-model="login.password" lazy-rules
+                        :rules="[this.required]" :type="login.showPassword ? 'text' : 'password'" label="password">
+                        <template v-slot:prepend>
+                            <q-icon name="lock" />
+                        </template>
+                        <template v-slot:append>
+                            <q-icon :name="login.showPassword ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                                @click="login.showPassword = !login.showPassword" />
+                        </template>
+
+                    </q-input>
+                </q-card-section>
+                {% if error %}
+                <q-card-section class="q-pt-none">
+                    <div class="text-center q-pa-sm">
+                        <h6 class="text-red">Mot de passe ou nom d'utilisateur inconnus</h6>
+                    </div>
+                </q-card-section>
+                {% endif %}
+                <q-card-section class="q-pt-none">
+                    <div class="q-px-lg">
+                        <q-btn type="submit" unelevated size="lg" :color="login.btnColor" class="full-width text-white"
+                            label="SE CONNECTER" :loading="login.loading"
+                            :icon="login.btnColor == 'negative' ? 'error' : 'login'" />
+                    </div>
+                </q-card-section>
+            </q-form>
+        </q-card>
+    </div>
+</q-page>
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <div v-if="myFiles.loading">TEST</div>
+    <div v-else class="q-pa-md row items-start q-gutter-md q-col-gutter-md q-justify-center">
+        <q-card flat bordered v-for="item in getMyFiles(user.id)" :key="item.id"
+            class="col-12 col-sm-6 col-md-4 col-lg-3"
+            style="max-width: 450px; height: 425px; display: flex; flex-direction: column; justify-content: space-between;">
+
+            <div>
+                <q-img v-if="item.filetype.startsWith('image')" :src="'/api/files/' + item.id" fit="contain"
+                    style="height: 200px; width: 100%;">
+                </q-img>
+                <video v-if="item.filetype.startsWith('video')" id="my-video" class="video-js" controls preload="auto"
+                    style="height: 200px; width: 100%; object-fit: contain;">
+                    <source :src="'/api/files/' + item.id" type="video/mp4" />
+                </video>
+            </div>
+
+            <q-card-section>
+                <div class="row no-wrap items-center">
+                    <div class="col text-h6 ellipsis">
+                        <a :href="'/file/' + item.id" target="_blank">
+                            <svg style="color: primary" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2">
+                                    <path stroke-dasharray="48" stroke-dashoffset="48" d="M11 5h-6v14h14v-6">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s"
+                                            values="48;0" />
+                                    </path>
+                                    <path stroke-dasharray="12" stroke-dashoffset="12" d="M13 11l7 -7">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s"
+                                            values="12;0" />
+                                    </path>
+                                    <path stroke-dasharray="8" stroke-dashoffset="8" d="M21 3h-6M21 3v6">
+                                        <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.8s" dur="0.2s"
+                                            values="8;0" />
+                                    </path>
+                                </g>
+                            </svg> [[item.filename]]
+                        </a>
+                        <q-tooltip :delay="1000" :offset="[0, 10]">
+                            [[item.filename]]
+                        </q-tooltip>
+                    </div>
+                    <div class="col-auto text-grey text-caption row items-center">
+                        <q-chip size="sm" color="primary" text-color="white" icon="bookmark" v-if="item.category">
+                            [[ item.category ]]
+                        </q-chip>
+                    </div>
+                </div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+                <div class="text-subtitle1">
+                    Uploaded by [[ item.username ]]
+                </div>
+                <div class="text-caption text-grey">
+                    Liked by [[ item.votes_count ]] users
+                </div>
+                <div class="text-caption text-grey">
+                    <q-avatar v-for="(voter, index) in item.voters" :key="voter" size="sm">
+                        <img :src="'/api/users/' + user.id + '/picture'">
+                        <q-tooltip class="bg-indigo" :offset="[10, 10]">
+                            [[ item.voternames[index] ]]
+                        </q-tooltip>
+                    </q-avatar>
+                </div>
+            </q-card-section>
+
+            <q-separator></q-separator>
+
+            <q-card-actions align="left" class="q-mb-xl">
+                <!-- Check if user voted and toggle button color accordingly -->
+                <div v-if="item.voters.includes(user.id)">
+                    <q-btn flat round color="red" icon="favorite" @click="toggleLike(item.id)"
+                        :disabled="!logged_in"></q-btn>
+                </div>
+                <div v-else>
+                    <q-btn flat round color="grey-8" icon="favorite" @click="toggleLike(item.id)"
+                        :disabled=" !logged_in"></q-btn>
+                </div>
+                <q-btn flat round color="teal" icon="bookmark"></q-btn>
+                <q-btn flat round color="primary" icon="share"></q-btn>
+            </q-card-actions>
+            <q-card-actions align="right">
+                <q-btn color="grey" round flat dense :icon="expanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down'"
+                    @click="expanded = !expanded" />
+            </q-card-actions>
+            <q-slide-transition>
+                <div v-show="expanded">
+                    <q-separator></q-separator>
+                    <q-card-section class="text-subtitle2">
+                        <div><q-input v-model="item.filename" label="Filename"></q-input></div>
+                        <div><q-input v-model="item.category" label="Category"></q-input></div>
+                    </q-card-section>
+                </div>
+            </q-slide-transition>
+        </q-card>
+    </div>
+</div>
+
+<div class="q-pa-lg flex flex-center">
+    <q-pagination v-model="currentPage" color="primary" :max="accueil.total_pages" :max-pages="5"
+        :boundary-numbers="false" @update:model-value="onPageChange"></q-pagination>
+</div>
+{% endblock %}

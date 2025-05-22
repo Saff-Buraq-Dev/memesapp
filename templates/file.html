@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% block content %}
+<q-page style="background: linear-gradient(#cbd4f3, #719aff);">
+    <div class="row q-pa-md justify-center">
+        <q-card flat bordered class="col-12 justify-center"
+            style="width: 100%; height: 650px; display: flex; flex-direction: column; justify-content: space-between;">
+
+            <div>
+                {% if 'image' in item.filetype %}
+                <q-img :src="'/api/files/' + {{ item.id }}" fit="contain" style="height: 400px; width: 100%;">
+                </q-img>
+                {% endif %}
+
+                {% if 'video' in item.filetype %}
+                <video id="my-video" class="video-js" controls preload="auto"
+                    style="height: 400px; width: 100%; object-fit: contain;">
+                    <source :src="'/api/files/' + {{ item.id }}" type="video/mp4" />
+                </video>
+                {% endif %}
+            </div>
+
+            <q-card-section>
+                <div class="row no-wrap items-center">
+                    <div class="col text-h6 ellipsis">
+                        {{item.filename}}
+                        <q-tooltip :delay="1000" :offset="[0, 10]">
+                            {{item.filename}}
+                        </q-tooltip>
+                    </div>
+                    <div class="col-auto text-grey text-caption q-pt-md row no-wrap items-center">
+                        {% if item.category %}
+                        <q-chip size="sm" color="primary" text-color="white" icon="bookmark">
+                            {{item.category}}
+                        </q-chip>
+                        {% endif %}
+                    </div>
+                </div>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none">
+                <div class="text-subtitle1">
+                    Uploaded by {{item.username}}
+                </div>
+                <div class="text-caption text-grey">
+                    Liked by {{item.votes_count}} users
+                </div>
+            </q-card-section>
+
+        </q-card>
+    </div>
+</q-page>
+{% endblock %}
