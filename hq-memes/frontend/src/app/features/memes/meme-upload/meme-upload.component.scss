@@ -1,0 +1,62 @@
+.image-preview-container {
+  height: 200px;
+  overflow: hidden;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.category-input-container {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  background-color: white;
+}
+
+.clickable-badge {
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #0d6efd;
+  }
+}
+
+// Make mat-form-field match Bootstrap styling
+::ng-deep .mat-form-field {
+  width: 100%;
+
+  .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  .mat-form-field-flex {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.75rem !important;
+    background-color: white !important;
+  }
+
+  .mat-form-field-underline {
+    display: none;
+  }
+}
+
+// Style for the chip list
+::ng-deep .mat-chip-list {
+  width: 100%;
+
+  .mat-chip {
+    background-color: #007bff;
+    color: white;
+
+    .mat-icon {
+      color: white;
+    }
+  }
+}

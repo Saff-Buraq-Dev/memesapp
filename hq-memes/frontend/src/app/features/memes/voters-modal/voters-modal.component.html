@@ -1,0 +1,18 @@
+<div class="modal-header">
+  <h5 class="modal-title">People who liked this meme</h5>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
+</div>
+<div class="modal-body">
+  <ul class="list-group">
+    <li *ngFor="let voter of voters" class="list-group-item d-flex align-items-center">
+      <img [src]="getVoterImageUrl(voter)" [alt]="voter.username" class="voter-avatar me-3">
+      <span>{{ voter.username }}</span>
+    </li>
+    <li *ngIf="voters.length === 0" class="list-group-item text-center">
+      No one has liked this meme yet.
+    </li>
+  </ul>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" (click)="activeModal.close()">Close</button>
+</div>

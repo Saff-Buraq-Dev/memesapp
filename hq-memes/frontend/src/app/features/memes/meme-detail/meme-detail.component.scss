@@ -1,0 +1,76 @@
+.meme-image {
+  max-height: 500px;
+  object-fit: contain;
+  background-color: #f8f9fa;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-list {
+  margin-top: 20px;
+}
+
+.comment-item {
+  margin-bottom: 15px;
+}
+
+.comment-avatar {
+  width: 40px;
+  text-align: center;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  margin-bottom: 5px;
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.voter-avatars {
+  display: flex;
+  align-items: center;
+}
+
+.voter-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+  margin-right: -10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.more-voters {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.voters-container {
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}

@@ -1,0 +1,12 @@
+package com.memevote.backend;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class MemeVoteApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MemeVoteApplication.class, args);
+    }
+}

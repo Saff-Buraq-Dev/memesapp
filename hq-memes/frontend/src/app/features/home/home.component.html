@@ -1,0 +1,108 @@
+<div class="row">
+  <div class="col-md-3">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Filters</h5>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="searchTitle" class="form-label">Search by Title</label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchTitle" [(ngModel)]="searchTitle" placeholder="Search...">
+            <button class="btn btn-primary" type="button" (click)="onSearch()">
+              <i class="bi bi-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Categories</label>
+          <div class="form-check" *ngFor="let category of categories">
+            <input class="form-check-input" type="checkbox" [id]="'category-' + category.id"
+                  [checked]="selectedCategories.includes(category.name)"
+                  (change)="onCategoryChange(category.name)">
+            <label class="form-check-label" [for]="'category-' + category.id">
+              {{ category.name }}
+            </label>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="sortOption" class="form-label">Sort By</label>
+          <select class="form-select" id="sortOption" [(ngModel)]="sortOption" (change)="onSortChange(sortOption)">
+            <option value="createdAt,desc">Newest</option>
+            <option value="voteCount,desc">Most Votes</option>
+            <option value="createdAt,asc">Oldest</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-9">
+    <h2 class="mb-4">Trending Memes</h2>
+
+    <div *ngIf="loading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div *ngIf="!loading && memes.length === 0" class="alert alert-info">
+      No memes found. Try adjusting your filters.
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      <div class="col" *ngFor="let meme of memes">
+        <div class="card h-100">
+          <img [src]="'http://localhost:8080/uploads/' + meme.url" class="card-img-top" [alt]="meme.title">
+          <div class="card-body">
+            <h5 class="card-title">{{ meme.title }}</h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <span class="badge bg-primary me-1" *ngFor="let category of meme.categories">
+                  {{ category.name }}
+                </span>
+              </div>
+              <div class="text-muted small">
+                {{ meme.createdAt | date:'medium' }}
+              </div>
+            </div>
+          </div>
+          <div class="card-footer d-flex justify-content-between align-items-center">
+            <div>
+              <button class="btn btn-sm" [class.btn-outline-danger]="!meme.userVoted" [class.btn-danger]="meme.userVoted">
+                <i class="bi bi-heart-fill"></i> {{ meme.voteCount }}
+              </button>
+            </div>
+            <div>
+              <a [routerLink]="['/memes', meme.id]" class="btn btn-sm btn-primary">
+                View Details
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-4">
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="currentPage === 0">
+            <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage - 1)" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="i === currentPage">
+            <a class="page-link" href="javascript:void(0)" (click)="onPageChange(i)">{{ i + 1 }}</a>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages - 1">
+            <a class="page-link" href="javascript:void(0)" (click)="onPageChange(currentPage + 1)" aria-label="Next">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="row justify-content-center">
+  <div class="col-md-10">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Upload {{ isMultipleMode ? 'Multiple Memes' : 'a Meme' }}</h4>
+        <button type="button" class="btn btn-outline-light" (click)="toggleMode()">
+          Switch to {{ isMultipleMode ? 'Single' : 'Multiple' }} Upload
+        </button>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+          <!-- Title field - only shown in single mode -->
+          <div class="mb-3" *ngIf="!isMultipleMode">
+            <label for="title" class="form-label">Title</label>
+            <input
+              type="text"
+              formControlName="title"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': uploadForm.get('title')?.touched && uploadForm.get('title')?.errors }"
+              id="title"
+              placeholder="Enter a title for your meme"
+            />
+            <div *ngIf="uploadForm.get('title')?.touched && uploadForm.get('title')?.errors" class="invalid-feedback">
+              <div *ngIf="uploadForm.get('title')?.errors?.['required']">Title is required</div>
+              <div *ngIf="uploadForm.get('title')?.errors?.['maxlength']">Title cannot exceed 100 characters</div>
+            </div>
+            <small class="form-text text-muted">By default, the filename will be used as the title</small>
+          </div>
+
+          <!-- Categories section - unified field -->
+          <div class="mb-3">
+            <label for="categories" class="form-label">Categories (Optional)</label>
+            <div class="category-input-container">
+              <!-- Selected/added categories -->
+              <div class="d-flex flex-wrap gap-2 mb-2">
+                <span *ngFor="let category of allCategories" class="badge bg-primary d-flex align-items-center">
+                  {{category}}
+                  <button type="button" class="btn-close btn-close-white ms-2" aria-label="Remove" (click)="removeCategory(category)"></button>
+                </span>
+              </div>
+
+              <!-- Existing categories as clickable badges -->
+              <div class="existing-categories mb-2">
+                <ng-container *ngFor="let category of categories">
+                  <span *ngIf="!allCategories.includes(category.name)"
+                        class="badge bg-secondary me-1 mb-1 clickable-badge"
+                        (click)="addExistingCategory(category.name)">
+                    {{category.name}}
+                  </span>
+                </ng-container>
+              </div>
+
+              <!-- Category input with datalist for suggestions -->
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Type a new category..."
+                  list="categoryOptions"
+                  #categoryInput
+                  (keyup.enter)="addCategory({value: categoryInput.value, chipInput: categoryInput}); categoryInput.value = ''"
+                  (keyup.comma)="addCategory({value: categoryInput.value, chipInput: categoryInput}); categoryInput.value = ''"
+                >
+                <datalist id="categoryOptions">
+                  <option *ngFor="let category of categories" [value]="category.name"></option>
+                </datalist>
+                <button class="btn btn-outline-secondary" type="button" (click)="addCategory({value: categoryInput.value, chipInput: categoryInput}); categoryInput.value = ''">Add</button>
+              </div>
+            </div>
+            <small class="form-text text-muted">Click on an existing category or type a new one. Press Enter, comma, or click Add.</small>
+          </div>
+
+          <!-- File upload section -->
+          <div class="mb-4">
+            <label for="file" class="form-label">Upload {{ isMultipleMode ? 'Images' : 'Image' }}</label>
+            <input
+              type="file"
+              class="form-control"
+              [ngClass]="{ 'is-invalid': selectedFiles.length === 0 }"
+              id="file"
+              accept="image/jpeg,image/png,image/gif"
+              (change)="onFileSelected($event)"
+              [multiple]="isMultipleMode"
+            />
+            <div *ngIf="selectedFiles.length === 0" class="invalid-feedback">
+              Please select at least one image file (JPEG, PNG, or GIF)
+            </div>
+            <small class="form-text text-muted">Maximum file size: 5MB per image</small>
+          </div>
+
+          <!-- Image previews -->
+          <div *ngIf="imagePreviews.length > 0" class="mb-4">
+            <label class="form-label">Preview</label>
+            <div class="row">
+              <div *ngFor="let preview of imagePreviews; let i = index" class="col-md-4 mb-3">
+                <div class="card">
+                  <div class="image-preview-container">
+                    <img [src]="preview.preview" class="card-img-top" [alt]="'Meme Preview ' + (i+1)">
+                  </div>
+                  <div class="card-body p-2">
+                    <p class="card-text small text-truncate">{{ preview.file.name }}</p>
+                    <button type="button" class="btn btn-sm btn-danger" (click)="removeFile(i)">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Submit button -->
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="uploadForm.invalid || selectedFiles.length === 0 || loading">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+              Upload {{ isMultipleMode ? 'Memes' : 'Meme' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
