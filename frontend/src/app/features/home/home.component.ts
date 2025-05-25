@@ -3,6 +3,7 @@ import { MemeService } from '../../core/services/meme.service';
 import { CategoryService } from '../../core/services/category.service';
 import { Meme } from '../../core/models/meme.model';
 import { Category } from '../../core/models/category.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -84,5 +85,9 @@ export class HomeComponent implements OnInit {
   onPageChange(page: number): void {
     this.currentPage = page;
     this.loadMemes();
+  }
+
+  getMemeImageUrl(memeUrl: string): string {
+    return `${environment.uploadsUrl}/${memeUrl}`;
   }
 }

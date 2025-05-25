@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 /**
- * Database configuration for production and staging environments using AWS Secrets Manager
+ * Database configuration for production and development environments using AWS Secrets Manager
  */
 @Configuration
-@Profile({"prod", "staging"})
+@Profile({"prod", "dev"})
 public class DatabaseConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseConfig.class);

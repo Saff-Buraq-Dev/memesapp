@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { UserService } from '../../../core/services/user.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { User, ProfileUpdateRequest } from '../../../core/models/user.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-profile',
@@ -35,23 +36,42 @@ export class ProfileComponent implements OnInit {
   }
 
   loadCurrentUser(): void {
-    this.currentUser = this.authService.getCurrentUser();
-    if (this.currentUser) {
-      this.profileForm.patchValue({
-        username: this.currentUser.username
-      });
-      
-      if (this.currentUser.profilePicture) {
-        this.imagePreview = `http://localhost:8080/uploads/${this.currentUser.profilePicture}`;
+    // Fetch full user data from API (now includes email)
+    this.userService.getCurrentUser().subscribe(
+      user => {
+        this.currentUser = user;
+
+        this.profileForm.patchValue({
+          username: this.currentUser.username
+        });
+
+        if (this.currentUser.profilePicture) {
+          this.imagePreview = `${environment.uploadsUrl}/${this.currentUser.profilePicture}`;
+        }
+      },
+      error => {
+        console.error('Error loading user data:', error);
+        // Fallback to auth user data
+        const authUser = this.authService.getCurrentUser();
+        if (authUser) {
+          this.currentUser = authUser;
+          this.profileForm.patchValue({
+            username: this.currentUser.username
+          });
+
+          if (this.currentUser.profilePicture) {
+            this.imagePreview = `${environment.uploadsUrl}/${this.currentUser.profilePicture}`;
+          }
+        }
       }
-    }
+    );
   }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length) {
       this.selectedFile = input.files[0];
-      
+
       // Check file type
       const fileType = this.selectedFile.type;
       if (fileType !== 'image/jpeg' && fileType !== 'image/png' && fileType !== 'image/gif') {
@@ -59,14 +79,14 @@ export class ProfileComponent implements OnInit {
         this.selectedFile = null;
         return;
       }
-      
+
       // Check file size (max 2MB)
       if (this.selectedFile.size > 2 * 1024 * 1024) {
         this.toastr.error('File size should not exceed 2MB');
         this.selectedFile = null;
         return;
       }
-      
+
       // Create image preview
       const reader = new FileReader();
       reader.onload = () => {
@@ -87,12 +107,16 @@ export class ProfileComponent implements OnInit {
         this.toastr.success(response.message || 'Profile picture updated successfully');
         this.uploadLoading = false;
         this.selectedFile = null;
-        
-        // Refresh user data
+
+        // Refresh user data and update AuthService
         this.userService.getCurrentUser().subscribe(
           user => {
-            if (this.currentUser) {
-              this.currentUser.profilePicture = user.profilePicture;
+            this.currentUser = user;
+            // Update the AuthService so navbar gets updated
+            this.authService.updateCurrentUser(user);
+            // Update image preview
+            if (user.profilePicture) {
+              this.imagePreview = `${environment.uploadsUrl}/${user.profilePicture}`;
             }
           }
         );
@@ -118,7 +142,7 @@ export class ProfileComponent implements OnInit {
       response => {
         this.toastr.success(response.message || 'Profile updated successfully');
         this.loading = false;
-        
+
         // Refresh user data
         this.userService.getCurrentUser().subscribe(
           user => {

@@ -141,7 +141,7 @@ export class MemeVoteStack extends cdk.Stack {
       }),
       environment: {
         SPRING_DATASOURCE_URL: `jdbc:mysql://${dbCluster.clusterEndpoint.hostname}:3306/${config.dbName}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC`,
-        SPRING_PROFILES_ACTIVE: config.environment === 'dev' ? 'staging' : 'prod',
+        SPRING_PROFILES_ACTIVE: config.environment === 'dev' ? 'dev' : 'prod',
         AWS_REGION: this.region,
         DB_SECRET_NAME: `${config.projectName}-${config.environment}-db-credentials`,
         CORS_ALLOWED_ORIGINS: `https://${config.frontendSubdomain}.${config.domainName}`,

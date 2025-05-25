@@ -27,7 +27,7 @@
         </ng-container>
         <li class="nav-item dropdown" *ngIf="currentUser" ngbDropdown>
           <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" ngbDropdownToggle>
-            <img *ngIf="currentUser.profilePicture" [src]="'http://localhost:8080/uploads/' + currentUser.profilePicture"
+            <img *ngIf="currentUser.profilePicture" [src]="getUserImageUrl(currentUser.profilePicture)"
                  class="avatar" alt="Profile Picture">
             <span *ngIf="!currentUser.profilePicture" class="bi bi-person-circle"></span>
             {{ currentUser.username }}

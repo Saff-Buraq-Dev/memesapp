@@ -50,8 +50,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: [environment.production ? 'api.memevote.com' : 'localhost:8080'],
-        disallowedRoutes: [environment.production ? 'api.memevote.com/api/auth' : 'localhost:8080/api/auth']
+        allowedDomains: [environment.apiUrl.replace('https://', '').replace('http://', '').replace('/api', '')],
+        disallowedRoutes: [environment.apiUrl.replace('/api', '/api/auth')]
       }
     })
   ],

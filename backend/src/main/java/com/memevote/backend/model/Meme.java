@@ -55,6 +55,9 @@ public class Meme {
     )
     private Set<Category> categories = new HashSet<>();
 
+    @org.hibernate.annotations.Formula("(SELECT COUNT(*) FROM votes v WHERE v.meme_id = id)")
+    private Long voteCount;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

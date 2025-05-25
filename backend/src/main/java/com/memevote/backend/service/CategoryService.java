@@ -1,5 +1,6 @@
 package com.memevote.backend.service;
 
+import com.memevote.backend.dto.request.CategoryRequest;
 import com.memevote.backend.dto.response.CategoryDto;
 import com.memevote.backend.model.Category;
 import com.memevote.backend.repository.CategoryRepository;
@@ -21,6 +22,20 @@ public class CategoryService {
         return categoryRepository.findAll().stream()
                 .map(this::mapToCategoryDto)
                 .collect(Collectors.toList());
+    }
+
+    public CategoryDto createCategory(CategoryRequest categoryRequest) {
+        // Check if category already exists
+        Optional<Category> existingCategory = categoryRepository.findByName(categoryRequest.getName());
+        if (existingCategory.isPresent()) {
+            return mapToCategoryDto(existingCategory.get());
+        }
+
+        // Create new category
+        Category category = new Category();
+        category.setName(categoryRequest.getName());
+        Category savedCategory = categoryRepository.save(category);
+        return mapToCategoryDto(savedCategory);
     }
 
     public Set<Category> getCategoriesByNames(Set<String> categoryNames) {

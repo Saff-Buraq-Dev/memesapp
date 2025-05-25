@@ -53,7 +53,7 @@ public class CommentControllerTest {
         objectMapper = new ObjectMapper();
 
         // Setup user summary
-        userSummary = new UserSummary(1L, "testuser", "profile.jpg");
+        userSummary = new UserSummary(1L, "testuser", "test@example.com", "profile.jpg");
 
         // Setup comment request
         commentRequest = new CommentRequest();

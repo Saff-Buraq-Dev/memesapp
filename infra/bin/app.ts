@@ -35,7 +35,9 @@ const config: MemeVoteConfig = {
   environment: environment,
 
   // Domain configuration
-  domainName: process.env.DOMAIN_NAME || 'gharbidev.com',
+  domainName: isProd
+    ? (process.env.PROD_DOMAIN_NAME || 'gharbidev.com')
+    : (process.env.DEV_DOMAIN_NAME || 'dev.gharbidev.com'),
   frontendSubdomain: isProd
     ? (process.env.PROD_FRONTEND_SUBDOMAIN || process.env.FRONTEND_SUBDOMAIN || 'app')
     : (process.env.DEV_FRONTEND_SUBDOMAIN || process.env.FRONTEND_SUBDOMAIN || 'dev-app'),
