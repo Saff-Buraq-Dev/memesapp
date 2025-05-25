@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { User } from '../../core/models/user.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -26,5 +27,12 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/']);
+  }
+
+  getUserImageUrl(profilePicture: string | null | undefined): string {
+    if (!profilePicture) {
+      return 'assets/images/default-avatar.png';
+    }
+    return `${environment.uploadsUrl}/${profilePicture}`;
   }
 }

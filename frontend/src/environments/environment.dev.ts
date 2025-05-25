@@ -2,6 +2,7 @@ import { Environment } from './environment.interface';
 
 export const environment: Environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api',
-  uploadsUrl: 'http://localhost:8080/uploads'
+  // For AWS development environment
+  apiUrl: 'https://dev-api.dev.gharbidev.com/api',
+  uploadsUrl: 'https://dev-api.dev.gharbidev.com/uploads'
 };

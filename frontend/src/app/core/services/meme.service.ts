@@ -71,4 +71,12 @@ export class MemeService {
 
     return this.http.post<Meme[]>(`${this.apiUrl}/batch`, formData);
   }
+
+  updateMeme(id: number, memeRequest: any): Observable<Meme> {
+    return this.http.put<Meme>(`${this.apiUrl}/${id}`, memeRequest);
+  }
+
+  deleteMeme(id: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }

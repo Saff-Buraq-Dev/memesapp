@@ -2,6 +2,7 @@ package com.memevote.backend.controller;
 
 import com.memevote.backend.dto.request.MemeRequest;
 import com.memevote.backend.dto.response.MemeResponse;
+import com.memevote.backend.dto.response.MessageResponse;
 import com.memevote.backend.service.MemeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -106,5 +108,43 @@ public class MemeController {
             @PathVariable Long id) {
         MemeResponse meme = memeService.getMemeById(id);
         return ResponseEntity.ok(meme);
+    }
+
+    @Operation(summary = "Update meme", description = "Update meme title and categories (only by owner)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Meme updated successfully"),
+        @ApiResponse(responseCode = "403", description = "Forbidden - not the owner"),
+        @ApiResponse(responseCode = "404", description = "Meme not found")
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<MemeResponse> updateMeme(
+            @Parameter(description = "ID of the meme to update", required = true)
+            @PathVariable Long id,
+            @Parameter(description = "Updated meme data", required = true)
+            @RequestBody MemeRequest memeRequest) {
+        try {
+            MemeResponse response = memeService.updateMeme(id, memeRequest);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+    }
+
+    @Operation(summary = "Delete meme", description = "Delete a meme (only by owner)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Meme deleted successfully"),
+        @ApiResponse(responseCode = "403", description = "Forbidden - not the owner"),
+        @ApiResponse(responseCode = "404", description = "Meme not found")
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MessageResponse> deleteMeme(
+            @Parameter(description = "ID of the meme to delete", required = true)
+            @PathVariable Long id) {
+        try {
+            MessageResponse response = memeService.deleteMeme(id);
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
     }
 }

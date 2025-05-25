@@ -59,7 +59,7 @@ public class MemeControllerTest {
         memeRequest.setCategories(new HashSet<>(Arrays.asList("Funny", "Test")));
 
         // Setup user summary
-        UserSummary userSummary = new UserSummary(1L, "testuser", "profile.jpg");
+        UserSummary userSummary = new UserSummary(1L, "testuser", "test@example.com", "profile.jpg");
 
         // Setup category DTOs
         Set<CategoryDto> categoryDtos = new HashSet<>();

@@ -8,6 +8,7 @@ export interface User {
 export interface UserSummary {
   id: number;
   username: string;
+  email: string;
   profilePicture?: string;
 }
 

@@ -1,0 +1,74 @@
+{
+  "vpc-provider:account=640111341785:filter.isDefault=true:region=ca-central-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0af7e773e600d25c5",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "ownerAccountId": "640111341785",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-03a2db45976ec2946",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "ca-central-1a",
+            "routeTableId": "rtb-06a342a97d6435722"
+          },
+          {
+            "subnetId": "subnet-0d10ad1bc39d1c078",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "ca-central-1b",
+            "routeTableId": "rtb-06a342a97d6435722"
+          },
+          {
+            "subnetId": "subnet-0dc3a6a356a4f5e0d",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "ca-central-1d",
+            "routeTableId": "rtb-06a342a97d6435722"
+          }
+        ]
+      }
+    ]
+  },
+  "hosted-zone:account=640111341785:domainName=gharbidev.com:region=ca-central-1": {
+    "Id": "/hostedzone/Z09618062RS5RB7UKLMDA",
+    "Name": "gharbidev.com."
+  },
+  "vpc-provider:account=655009248147:filter.isDefault=true:region=ca-central-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0f180216f4c7ed279",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "ownerAccountId": "655009248147",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0854be3757cfd131f",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "ca-central-1a",
+            "routeTableId": "rtb-06c0f47045a85d7e0"
+          },
+          {
+            "subnetId": "subnet-0c4e07aaa06250c9e",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "ca-central-1b",
+            "routeTableId": "rtb-06c0f47045a85d7e0"
+          },
+          {
+            "subnetId": "subnet-008eb8f9c387fb6ba",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "ca-central-1d",
+            "routeTableId": "rtb-06c0f47045a85d7e0"
+          }
+        ]
+      }
+    ]
+  },
+  "hosted-zone:account=655009248147:domainName=dev.gharbidev.com:region=ca-central-1": {
+    "Id": "/hostedzone/Z005982130NMVGKL0RYQ1",
+    "Name": "dev.gharbidev.com."
+  }
+}

@@ -2,6 +2,7 @@ package com.memevote.backend.service;
 
 import com.memevote.backend.dto.request.MemeRequest;
 import com.memevote.backend.dto.response.MemeResponse;
+import com.memevote.backend.dto.response.MessageResponse;
 import com.memevote.backend.dto.response.UserSummary;
 import com.memevote.backend.dto.response.VoterDto;
 import com.memevote.backend.dto.websocket.WebSocketEvent;
@@ -9,6 +10,7 @@ import com.memevote.backend.model.Category;
 import com.memevote.backend.model.Meme;
 import com.memevote.backend.model.User;
 import com.memevote.backend.repository.MemeRepository;
+import com.memevote.backend.repository.UserRepository;
 import com.memevote.backend.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -31,6 +34,9 @@ public class MemeService {
 
     @Autowired
     private VoteRepository voteRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -131,7 +137,8 @@ public class MemeService {
 
         User filterUser = null;
         if (username != null && !username.isEmpty()) {
-            // TODO: Implement user lookup by username
+            filterUser = userRepository.findByUsername(username)
+                    .orElse(null);
         }
 
         Set<Category> categories = null;
@@ -176,6 +183,70 @@ public class MemeService {
                 .orElseThrow(() -> new RuntimeException("Meme not found"));
 
         return mapToMemeResponse(meme, currentUser);
+    }
+
+    public MemeResponse updateMeme(Long id, MemeRequest memeRequest) {
+        User currentUser = userService.getCurrentUser();
+
+        Meme meme = memeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Meme not found"));
+
+        // Check if current user is the owner
+        if (meme.getUser() == null) {
+            throw new RuntimeException("Meme has no owner");
+        }
+
+        if (!Objects.equals(meme.getUser().getId(), currentUser.getId())) {
+            System.err.println("Update authorization failed - Meme owner ID: " + meme.getUser().getId() +
+                             ", Current user ID: " + currentUser.getId());
+            throw new RuntimeException("You can only edit your own memes");
+        }
+
+        // Update title
+        meme.setTitle(memeRequest.getTitle());
+
+        // Update categories
+        if (memeRequest.getCategories() != null) {
+            Set<Category> categories = categoryService.getCategoriesByNames(memeRequest.getCategories());
+            meme.setCategories(categories);
+        } else {
+            meme.setCategories(new HashSet<>());
+        }
+
+        meme = memeRepository.save(meme);
+
+        return mapToMemeResponse(meme, currentUser);
+    }
+
+    public MessageResponse deleteMeme(Long id) {
+        User currentUser = userService.getCurrentUser();
+
+        Meme meme = memeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Meme not found"));
+
+        // Check if current user is the owner
+        if (meme.getUser() == null) {
+            throw new RuntimeException("Meme has no owner");
+        }
+
+        if (!Objects.equals(meme.getUser().getId(), currentUser.getId())) {
+            System.err.println("Delete authorization failed - Meme owner ID: " + meme.getUser().getId() +
+                             ", Current user ID: " + currentUser.getId());
+            throw new RuntimeException("You can only delete your own memes");
+        }
+
+        // Delete the image file
+        try {
+            imageStorageService.deleteImage(meme.getUrl());
+        } catch (Exception e) {
+            // Log the error but don't fail the deletion
+            System.err.println("Failed to delete image file: " + e.getMessage());
+        }
+
+        // Delete the meme (this will cascade delete votes and comments)
+        memeRepository.delete(meme);
+
+        return new MessageResponse("Meme deleted successfully");
     }
 
     private MemeResponse mapToMemeResponse(Meme meme, User currentUser) {

@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public UserSummary getUserSummary(User user) {
-        return new UserSummary(user.getId(), user.getUsername(), user.getProfilePicture());
+        return new UserSummary(user.getId(), user.getUsername(), user.getEmail(), user.getProfilePicture());
     }
 
     public MessageResponse updateProfile(ProfileUpdateRequest profileUpdateRequest) {

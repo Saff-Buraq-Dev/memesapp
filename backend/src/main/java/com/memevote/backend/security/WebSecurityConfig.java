@@ -84,6 +84,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/uploads/**").permitAll() // Allow access to images from database
             .antMatchers("/ws/**").permitAll()
             .antMatchers("/h2-console/**").permitAll()
+            // Actuator endpoints for health checks
+            .antMatchers("/actuator/health").permitAll()
+            .antMatchers("/actuator/info").permitAll()
             // Swagger UI
             .antMatchers("/swagger-ui.html").permitAll()
             .antMatchers("/swagger-ui/**").permitAll()

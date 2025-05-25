@@ -55,7 +55,7 @@ public class UserControllerTest {
         user.setProfilePicture("profile.jpg");
 
         // Setup user summary
-        userSummary = new UserSummary(1L, "testuser", "profile.jpg");
+        userSummary = new UserSummary(1L, "testuser", "test@example.com", "profile.jpg");
 
         // Setup profile update request
         profileUpdateRequest = new ProfileUpdateRequest();

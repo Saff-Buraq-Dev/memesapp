@@ -61,6 +61,10 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  updateCurrentUser(user: User): void {
+    this.currentUserSubject.next(user);
+  }
+
   private loadCurrentUser(): void {
     const token = this.localStorage.retrieve('token');
     if (token && !this.jwtHelper.isTokenExpired(token)) {

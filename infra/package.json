@@ -1,0 +1,31 @@
+{
+  "name": "memevote-infra",
+  "version": "1.0.0",
+  "description": "Infrastructure for MemeVote application",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk",
+    "deploy": "cdk deploy",
+    "destroy": "cdk destroy",
+    "synth": "cdk synth",
+    "diff": "cdk diff"
+  },
+  "keywords": [
+    "aws",
+    "cdk",
+    "infrastructure"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.15.21",
+    "aws-cdk": "^2.1016.1",
+    "aws-cdk-lib": "^2.198.0",
+    "constructs": "^10.4.2",
+    "dotenv": "^16.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

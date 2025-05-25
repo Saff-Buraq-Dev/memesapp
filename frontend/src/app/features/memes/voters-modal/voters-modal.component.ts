@@ -17,6 +17,6 @@ export class VotersModalComponent {
     if (!voter.profilePicture || voter.profilePicture === 'default-avatar.png') {
       return 'assets/images/default-avatar.png';
     }
-    return `${environment.apiUrl}/uploads/${voter.profilePicture}`;
+    return `${environment.uploadsUrl}/${voter.profilePicture}`;
   }
 }

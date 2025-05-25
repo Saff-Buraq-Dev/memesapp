@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { ProfileComponent } from './profile/profile.component';
 import { UserMemesComponent } from './user-memes/user-memes.component';
+import { EditMemeModalComponent } from './user-memes/edit-meme-modal.component';
 
 const routes: Routes = [
   {
@@ -19,7 +20,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     ProfileComponent,
-    UserMemesComponent
+    UserMemesComponent,
+    EditMemeModalComponent
   ],
   imports: [
     SharedModule,
